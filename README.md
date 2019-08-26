@@ -1,8 +1,8 @@
-# Moodler
-
 <p align="center">
-  <img src="/assets/moodle.png" height="210" width="821">
+  <img src="/assets/moodle.png" height="70" width="279">
 </p>
+
+# Moodler
 
 App that takes in any Concordia student ID, password and moodle course to then download all pdf and pptx files on that moodle page.
 

@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-import wget
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import getpass

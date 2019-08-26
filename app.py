@@ -13,7 +13,7 @@ moodle_page = 'https://moodle.concordia.ca/moodle/login/index.php'
 class Moodler:
     def __init__(self, username, password, course_page, outpath):
         """Moodler. Your automated Moodle pdf downloader.
-
+            821x210
         Arguments:
             username {string} -- Moodle username.
             password {string} -- Moodle password.
@@ -95,10 +95,10 @@ class Moodler:
 
         all_files = []
         new_files = []
-        for i, link in enumerate(cleaned_links[:5], 1):
+        for i, link in enumerate(cleaned_links, 1):
             all_files = os.listdir(self.outpath) # Before
             bot.find_element_by_xpath('//a[@href="' + link + '"]').click()
-            time.sleep(1)
+            time.sleep(1.5)
             new_files = os.listdir(self.outpath) # After
             most_recent_file = list(set(new_files) - set(all_files))
             print('{}. {} saved.'.format(i, most_recent_file[0]))

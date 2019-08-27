@@ -13,7 +13,7 @@ moodle_page = 'https://moodle.concordia.ca/moodle/login/index.php'
 class Moodler:
     def __init__(self, username, password, course_page, outpath):
         """Moodler. Your automated Moodle pdf downloader.
-            821x210
+            
         Arguments:
             username {string} -- Moodle username.
             password {string} -- Moodle password.

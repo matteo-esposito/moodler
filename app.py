@@ -13,7 +13,7 @@ moodle_page = 'https://moodle.concordia.ca/moodle/login/index.php'
 class Moodler:
     def __init__(self, username, password, course_page, outpath):
         """Moodler. Your automated Moodle pdf downloader.
-            821x210
+            
         Arguments:
             username {string} -- Moodle username.
             password {string} -- Moodle password.
@@ -36,7 +36,7 @@ class Moodler:
         fp.set_preference("pdfjs.disabled", True)
 
         opts = webdriver.FirefoxOptions()
-        opts.headless = True
+        opts.headless = False
         
         self.bot = webdriver.Firefox(options=opts, firefox_profile=fp)
 
@@ -57,7 +57,7 @@ class Moodler:
         pwd_field.clear()
         pwd_field.send_keys(self.password)
         pwd_field.send_keys(Keys.RETURN)
-        time.sleep(4)
+        time.sleep(5.5)
 
         if bot.current_url == 'https://moodle.concordia.ca/moodle/':
             pass
@@ -80,14 +80,18 @@ class Moodler:
         """
         bot = self.bot
 
+        # Icon sources.
+        pdf_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/document-24'
+        word_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/pdf-24'
+        ppt_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/powerpoint-24'
+
         # Scrape
         soup = BeautifulSoup(bot.page_source, features="lxml")
         divs = soup.findAll('div', attrs={'class' : 'activityinstance'})
-        pdf_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/pdf-24'
         pdf_links = []
         for div in divs:
             href = div.find('a')['href']
-            if div.find('img')['src'] == pdf_icon:
+            if div.find('img')['src'] in [pdf_icon, word_icon, ppt_icon]:
                 pdf_links.append(href)
 
         # Keep pdf links

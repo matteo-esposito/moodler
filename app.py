@@ -23,7 +23,13 @@ class Moodler:
         self.username = username
         self.password = password
         self.course_page = course_page
-        self.outpath = outpath
+
+        # Create destination folder in the case where it doesn't exist.
+        newpath = os.path.expanduser("~") + "/" + outpath
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+
+        self.outpath = newpath
         
         mime_types = "application/pdf,application/vnd.adobe.xfdf,application/vnd.fdf,application/vnd.adobe.xdp+xml"
 
@@ -36,7 +42,7 @@ class Moodler:
         fp.set_preference("pdfjs.disabled", True)
 
         opts = webdriver.FirefoxOptions()
-        opts.headless = False
+        opts.headless = True
         
         self.bot = webdriver.Firefox(options=opts, firefox_profile=fp)
 
@@ -81,9 +87,9 @@ class Moodler:
         bot = self.bot
 
         # Icon sources.
-        pdf_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/document-24'
-        word_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/pdf-24'
-        ppt_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1565843043/f/powerpoint-24'
+        pdf_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1575553324/f/document-24'
+        word_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1575553324/f/pdf-24'
+        ppt_icon = 'https://moodle.concordia.ca/moodle/theme/image.php/clean/core/1575553324/f/powerpoint-24'
 
         # Scrape
         soup = BeautifulSoup(bot.page_source, features="lxml")
@@ -96,13 +102,13 @@ class Moodler:
 
         # Keep pdf links
         cleaned_links = [x for x in pdf_links if x[:48] == 'https://moodle.concordia.ca/moodle/mod/resource/']
-
+        
         all_files = []
         new_files = []
         for i, link in enumerate(cleaned_links, 1):
             all_files = os.listdir(self.outpath) # Before
             bot.find_element_by_xpath('//a[@href="' + link + '"]').click()
-            time.sleep(1.5)
+            time.sleep(1.50)
             new_files = os.listdir(self.outpath) # After
             most_recent_file = list(set(new_files) - set(all_files))
             print('{}. {} saved.'.format(i, most_recent_file[0]))
@@ -116,10 +122,6 @@ if __name__ == '__main__':
     pwd = getpass.getpass()
     cse_pg = input('Course page: ')
     outpath = input('Destination folder: ')
-
-    # Create destination folder in the case where it doesn't exist.
-    if not os.path.exists(outpath):
-        os.mkdir(outpath)
 
     moodler = Moodler(user, pwd, cse_pg, outpath)
 
